@@ -16,9 +16,9 @@ export async function ApodOfToday() {
         }).then(res => res.json());
 }
 
-export async function AsteroidsFeed() {
+export async function AsteroidsFeed(startDate: string, endDate: string) {
     // Recibir fecha desde el cliente
-    return await fetch(`${URL_ASTEROIDS}/feed?start_date=2016-07-14&end_date=2016-07-21&api_key=${API_KEY}`, {
+    return await fetch(`${URL_ASTEROIDS}/feed?start_date=${startDate}&end_date=${endDate}&api_key=${API_KEY}`, {
             method: 'GET',
         }).then(res => res.json());
 }

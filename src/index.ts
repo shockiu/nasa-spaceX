@@ -1,17 +1,21 @@
 require('dotenv').config();
 const express = require('express');
-import * as cron from 'cron';
-import { searchImagesAndVideos } from './nasa-endpoints/nasa';
-import { allHistoricEvents, allLaunches, allMisions, allRockets } from './spaceX-endpoints/spaceX';
+import { searchImagesAndVideos, AsteroidsFeed } from './nasa-endpoints/nasa';
+import {  allHistoricEvents, 
+          allLaunches, 
+          allMisions, 
+          allRockets, 
+          latestLaunch, 
+          nextLaunch, 
+          oneHistoricEvent, 
+          oneLaunch, 
+          oneMision, 
+          oneRocket, 
+          pastLaunch} from './spaceX-endpoints/spaceX';
 import { cronJobApod, cronJobAstBrowse, cronJobAstNear } from './jobs/jobs.nasa';
 const app =  express();
 const PORT = process.env.PORT || 3000;
-const cronJob = cron.CronJob;
 
-let job = new cronJob('0 */2 * * * *', () => {
-});
-
-// job.start();
 
 app.listen(PORT, () => {
     console.log(`Server runing port: ${PORT}`);
@@ -36,7 +40,9 @@ app.get('/apod-today-nasa', ( req:any, res:any ) => {
 
 app.get('/asteroid-feed-nasa/:startDate/:endDate', ( req:any, res:any ) => {
     let {startDate, endDate} = req.params;
-    res.status(200).send('Ok');
+    AsteroidsFeed(startDate, endDate).then(resp => {
+        res.status(200).send(resp);
+    });
 });
 
 app.get('/asteroid-browse-nasa', ( req:any, res:any ) => {
@@ -61,4 +67,38 @@ app.get('/launches-spaceX', (req: any, res: any) => {
 
 app.get('/rockets-spaceX', (req: any, res: any) => {
     allRockets().then(resp => res.send(resp));
+});
+
+// Specific event
+
+app.get('/historic-spaceX/:id', (req: any, res: any) => {
+    const { id } = req.params;
+    oneHistoricEvent( id ).then(resp => res.send(resp) );
+});
+
+app.get('/missions-spaceX/:missionId', (req: any, res: any) => {
+    const { missionId } = req.params;
+    oneMision(missionId).then( resp => res.send(resp) );
+});
+
+app.get('/launches-spaceX/:flightNumber', (req: any, res: any) => {
+    const { flightNumber } = req.params;
+    oneLaunch(flightNumber).then(resp => res.send(resp) );
+});
+
+app.get('/rockets-spaceX/:rocketId', (req: any, res: any) => {
+    const { rocketId } = req.params;
+    oneRocket(rocketId).then( resp => res.send(resp) );
+});
+
+app.get('/launches-spaceX/:type', (req: any, res: any) => {
+    const { type } = req.params;
+
+    if( type === 'latest' ) {
+        latestLaunch().then(resp => res.send(resp) );
+    } else if ( type === 'next' ) {
+        nextLaunch().then( resp => res.send(resp) );
+    } else {
+        pastLaunch().then(resp => res.send(resp));
+    }
 });
