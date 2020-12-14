@@ -6,3 +6,6 @@
 
 #enviroment
 *.env
+
+#typescript code solo para emitir subir .ts al servidor
+/src
