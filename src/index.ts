@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-import cron from 'cron';
 import { searchImagesAndVideos, AsteroidsFeed } from './nasa-endpoints/nasa';
 import {  allHistoricEvents, 
           allLaunches, 
@@ -21,15 +20,6 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server runing port: ${PORT}`);
 });
-
-
-// job prueba 
-
-const job = new cron.CronJob('* */2 * * * *', ()=>{
-    console.log('prueba de trabajo corriendo');
-});
-job.start()
-
 
 // JOBS NASA
 cronJobApod.start();

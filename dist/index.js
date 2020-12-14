@@ -1,11 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 var express = require('express');
-var cron_1 = __importDefault(require("cron"));
 var nasa_1 = require("./nasa-endpoints/nasa");
 var spaceX_1 = require("./spaceX-endpoints/spaceX");
 var jobs_nasa_1 = require("./jobs/jobs.nasa");
@@ -14,11 +10,6 @@ var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
     console.log("Server runing port: " + PORT);
 });
-// job prueba 
-var job = new cron_1.default.CronJob('* */2 * * * *', function () {
-    console.log('prueba de trabajo corriendo');
-});
-job.start();
 // JOBS NASA
 jobs_nasa_1.cronJobApod.start();
 jobs_nasa_1.cronJobAstBrowse.start();
