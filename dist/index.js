@@ -10,6 +10,11 @@ var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
     console.log("Server runing port: " + PORT);
 });
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 // JOBS NASA
 jobs_nasa_1.cronJobApod.start();
 jobs_nasa_1.cronJobAstBrowse.start();
