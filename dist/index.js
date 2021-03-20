@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 var express = require('express');
+var cors = require('cors');
 var nasa_1 = require("./nasa-endpoints/nasa");
 var spaceX_1 = require("./spaceX-endpoints/spaceX");
 var jobs_nasa_1 = require("./jobs/jobs.nasa");
@@ -10,11 +11,14 @@ var PORT = process.env.PORT || 3000;
 app.listen(PORT, function () {
     console.log("Server runing port: " + PORT);
 });
-app.use(function (req, res, next) {
+app.use(cors());
+/*
+app.use(function(req: any, res: { header: (arg0: string, arg1: string) => void; }, next: () => void) {
     res.header("Access-Control-Allow-Origin", "http://localhost:4200"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
-});
+  });
+*/
 // JOBS NASA
 jobs_nasa_1.cronJobApod.start();
 jobs_nasa_1.cronJobAstBrowse.start();

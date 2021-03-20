@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors';)
+const cors = require('cors');
 import { searchImagesAndVideos, AsteroidsFeed } from './nasa-endpoints/nasa';
 import {  allHistoricEvents, 
           allLaunches, 
